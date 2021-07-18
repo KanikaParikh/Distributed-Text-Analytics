@@ -1,0 +1,25 @@
+Question: how would you modify these scripts in order to compute the frequency of each of the quantities
+(instead of the number of occurrences)? Provide a short answer in plain text:
+
+Answer: 
+Part A of this assignment is about calculating number of occurrences of each uni/bi/trigrams.By occurrences we mean number of outcomes  without knowing the total number whereas Frequency means the number of occurrences of the uni/bi/trigram / total number of uni/bi/trigrams present in a document. 
+
+We need to make a counter "Track" which gives us the total number of uni/bi/trigrams and is generated at the end of mapper computation. We need to store this counter value with a specific key such that before going into reducer, the Hadoop shuffle part shuffles the values in such a way that it makes that unique key as the first line of input for reducer.
+
+Then we can make Reducer algorithm in such a way that it divides the number of occurrences for a particular words by this counter value. This gives us frequency of our uni/bi/trigrams.
+Example-
+Mapper: 
+    "My name" 2
+    "is Kanika" 2
+    "Hello Hi" 1
+    "I am" 3
+    Track = 8 (Counter value)
+
+Reducer: 
+    "My name" 2/8 =1/4
+    "is Kanika" 2 =1/4
+    "Hello Hi" 1  =1/8
+    "I am" 3      =3/8
+
+    Frequency of "My name" is : 2/8 ( It means we can see "My name" after every 4 words.)
+
